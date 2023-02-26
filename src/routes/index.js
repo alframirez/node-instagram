@@ -18,7 +18,7 @@ const redirectUri = "https://node-instagram.onrender.com/handleauth";
 router.get("/auth/instagram", (req, res) => {
   res.redirect(
     instagram.getAuthorizationUrl(redirectUri, {
-      scope: ["basic", "likes"],
+      scope: ["user_profile", "user_media"],
       state: "your state",
     })
   );
@@ -28,8 +28,13 @@ router.get("/handleauth", async (req, res) => {
   try {
     const code = req.query.code;
     const data = await instagram.authorizeUser(code, redirectUri);
-    console.log(data);
-    res.json(data);
+
+    req.session.access_token = data.access_token;
+    req.session.user_id = data.user.id;
+
+    instagram.config.accessToken = req.session.access_token;
+
+    res.redirect("/profile");
   } catch (error) {
     res.json(error);
   }
@@ -40,6 +45,8 @@ router.get("/login", (req, res) => {
 });
 router.get("/logout", () => {});
 
-router.get("/profile", () => {});
+router.get("/profile", (req, res) => {
+  res.render("profile");
+});
 
 module.exports = router;
