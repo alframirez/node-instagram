@@ -36,7 +36,7 @@ router.get("/handleauth", async (req, res) => {
 
     res.redirect("/profile");
   } catch (error) {
-    res.json(error);
+    res.json("error", error);
   }
 });
 
