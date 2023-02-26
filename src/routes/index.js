@@ -34,8 +34,6 @@ router.get("/handleauth", async (req, res) => {
 
     instagram.config.accessToken = req.session.access_token;
 
-    // res.json(data);
-
     res.redirect("/profile");
   } catch (error) {
     res.json("error" + error);
@@ -47,8 +45,12 @@ router.get("/login", (req, res) => {
 });
 router.get("/logout", () => {});
 
-router.get("/profile", (req, res) => {
-  res.render("profile");
+router.get("/profile", async (req, res) => {
+  try {
+    const media = await instagram.get("users/self/media/recent");
+    console.log(media);
+    res.render("profile");
+  } catch (error) {}
 });
 
 module.exports = router;
