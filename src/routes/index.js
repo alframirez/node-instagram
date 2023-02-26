@@ -47,7 +47,7 @@ router.get("/logout", () => {});
 
 router.get("/profile", async (req, res) => {
   try {
-    const media = await instagram.get("users/self/media/recent");
+    const media = await instagram.get(`${req.session.user_id}`);
     console.log(media);
     res.json(media);
     res.render("profile");
