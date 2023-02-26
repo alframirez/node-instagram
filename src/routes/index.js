@@ -1,10 +1,40 @@
 const express = require("express");
 const router = express.Router();
 
-const Instagram = require("node-instagram");
+const Instagram = require("node-instagram").default;
+const { clientId, clientSecret } = require("../keys").instagram;
+
+const instagram = new Instagram({
+  clientId: clientId,
+  clientSecret: clientSecret,
+});
 
 router.get("/", (req, res) => {
   res.render("index");
 });
+
+const redirectUri = "https://node-instagram.onrender.com/handleauth";
+
+router.get("/auth/instagram", (req, res) => {
+  res.redirect(
+    instagram.getAuthorizationUrl(redirectUri, {
+      scope: ["basic", "likes"],
+      state: "your state",
+    })
+  );
+});
+
+router.get("/handleauth", async (req, res) => {
+  const code = req.query.code;
+  const data = await instagram.getAuthorizeUser(code, redirectUri);
+  console.log(data);
+});
+
+router.get("/login", (req, res) => {
+  res.redirect("/auth/instagram");
+});
+router.get("/logout", () => {});
+
+router.get("/profile", () => {});
 
 module.exports = router;
