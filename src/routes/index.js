@@ -49,8 +49,11 @@ router.get("/profile", async (req, res) => {
   try {
     const media = await instagram.get("users/self/media/recent");
     console.log(media);
+    res.json(media);
     res.render("profile");
-  } catch (error) {}
+  } catch (error) {
+    res.json("error" + error);
+  }
 });
 
 module.exports = router;
