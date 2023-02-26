@@ -50,7 +50,7 @@ router.get("/profile", async (req, res) => {
     const media = await instagram.get(`${req.session.user_id}`);
     console.log(media);
     res.json(media);
-    res.render("profile");
+    // res.render("profile");
   } catch (error) {
     res.json("error" + error);
   }
