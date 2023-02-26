@@ -25,9 +25,14 @@ router.get("/auth/instagram", (req, res) => {
 });
 
 router.get("/handleauth", async (req, res) => {
-  const code = req.query.code;
-  const data = await instagram.getAuthorizeUser(code, redirectUri);
-  console.log(data);
+  try {
+    const code = req.query.code;
+    const data = await instagram.authorizeUser(code, redirectUri);
+    console.log(data);
+    res.json(data);
+  } catch (error) {
+    res.json(error);
+  }
 });
 
 router.get("/login", (req, res) => {
